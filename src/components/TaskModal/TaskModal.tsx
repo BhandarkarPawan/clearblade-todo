@@ -1,4 +1,4 @@
-import { Stack, TextField } from "@mui/material";
+import { Stack, TextField, styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -59,8 +59,37 @@ export default function BasicModal() {
         });
     };
 
+    const handleUpdateName = (e: React.ChangeEvent<HTMLInputElement>) =>
+        editingTask
+            ? setEditingTask({
+                  ...editingTask,
+                  name: e.target.value,
+              })
+            : setTask({
+                  ...task,
+                  name: e.target.value,
+              });
+
+    const handleUpdateDescription = (e: React.ChangeEvent<HTMLInputElement>) =>
+        editingTask
+            ? setEditingTask({
+                  ...editingTask,
+                  description: e.target.value,
+              })
+            : setTask({
+                  ...task,
+                  description: e.target.value,
+              });
+
+    const editModalLabel =
+        editingTask && editingTask.id > 0 ? "Edit Task" : "New Task";
+    const nameEditValue = editingTask ? editingTask.name : task.name;
+    const descriptionEditValue = editingTask
+        ? editingTask.description
+        : task.description;
+
     return (
-        <div>
+        <Wrapper>
             <Stack spacing={2} direction="row" justifyContent="space-between">
                 <Typography id="modal-modal-title" variant="h5" component="h2">
                     Tasks
@@ -81,27 +110,15 @@ export default function BasicModal() {
                         variant="h5"
                         component="h2"
                     >
-                        {editingTask && editingTask.id > 0
-                            ? "Edit Task"
-                            : "New Task"}
+                        {editModalLabel}
                     </Typography>
 
                     <TextField
                         id="standard-basic"
                         label="Title"
                         variant="standard"
-                        value={editingTask ? editingTask.name : task.name}
-                        onChange={(e) =>
-                            editingTask
-                                ? setEditingTask({
-                                      ...editingTask,
-                                      name: e.target.value,
-                                  })
-                                : setTask({
-                                      ...task,
-                                      name: e.target.value,
-                                  })
-                        }
+                        value={nameEditValue}
+                        onChange={handleUpdateName}
                     />
                     <TextField
                         id="standard-multiline-static"
@@ -109,22 +126,8 @@ export default function BasicModal() {
                         multiline
                         rows={4}
                         variant="standard"
-                        value={
-                            editingTask
-                                ? editingTask.description
-                                : task.description
-                        }
-                        onChange={(e) =>
-                            editingTask
-                                ? setEditingTask({
-                                      ...editingTask,
-                                      description: e.target.value,
-                                  })
-                                : setTask({
-                                      ...task,
-                                      description: e.target.value,
-                                  })
-                        }
+                        value={descriptionEditValue}
+                        onChange={handleUpdateDescription}
                     />
                     <Stack
                         spacing={2}
@@ -140,6 +143,10 @@ export default function BasicModal() {
                     </Stack>
                 </Box>
             </Modal>
-        </div>
+        </Wrapper>
     );
 }
+
+const Wrapper = styled("div")`
+    margin-bottom: 16px;
+`;

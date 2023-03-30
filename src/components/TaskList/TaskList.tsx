@@ -1,4 +1,4 @@
-import { Autocomplete, List, Stack, TextField, styled } from "@mui/material";
+import { Autocomplete, List, Stack, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -15,11 +15,13 @@ export default function BasicList() {
     const [completionFilter, setCompletionFilter] = useState<number>(2);
 
     const options = tasks.filter((task) => task.name);
+
     let filteredTasks = filter.length
         ? options.filter((task) =>
               task.name.toLowerCase().includes(filter.toLowerCase())
           )
         : options;
+
     if (completionFilter !== 2) {
         filteredTasks = filteredTasks.filter(
             (task) => task.completed === !!completionFilter
@@ -27,7 +29,14 @@ export default function BasicList() {
     }
 
     return (
-        <BoxWrapper>
+        <Box
+            sx={{
+                width: "100%",
+                maxWidth: "360",
+                backgroundColor: "background.paper",
+                paddingTop: "16px",
+            }}
+        >
             <Stack
                 direction="row"
                 spacing={2}
@@ -83,22 +92,15 @@ export default function BasicList() {
             </Stack>
             <List>
                 {filteredTasks.map((task, i) => (
-                    <ListItemWrapper disablePadding key={i}>
+                    <ListItem
+                        disablePadding
+                        key={i}
+                        sx={{ paddingBottom: "24px" }}
+                    >
                         <TaskCard task={task} />
-                    </ListItemWrapper>
+                    </ListItem>
                 ))}
             </List>
-        </BoxWrapper>
+        </Box>
     );
 }
-
-const BoxWrapper = styled(Box)`
-    width: "100%";
-    max-width: 360;
-    background-color: "background.paper";
-    padding-top: 16px;
-`;
-
-const ListItemWrapper = styled(ListItem)`
-    padding-bottom: 24px;
-`;

@@ -12,11 +12,11 @@ export interface IProps {
 }
 
 const TaskMenu: React.FC<IProps> = ({ task }) => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
     const setEditing = useStore((state) => state.setEditingTask);
     const deleteTask = useStore((state) => state.deleteTask);
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -24,6 +24,24 @@ const TaskMenu: React.FC<IProps> = ({ task }) => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleEdit = () => {
+        setEditing(task);
+        handleClose();
+    };
+
+    const handleDelete = () => {
+        deleteTask(task.id);
+        handleClose();
+    };
+
+    const handleDuplicate = () => {
+        setEditing({
+            ...task,
+            id: 0,
+        });
+        handleClose();
     };
 
     const ITEM_HEIGHT = 48;
@@ -53,35 +71,15 @@ const TaskMenu: React.FC<IProps> = ({ task }) => {
                     },
                 }}
             >
-                <MenuItemWrapper
-                    onClick={() => {
-                        setEditing(task);
-                        handleClose();
-                    }}
-                >
+                <MenuItemWrapper onClick={handleEdit}>
                     <EditIcon />
                     Edit
                 </MenuItemWrapper>
-                <MenuItemWrapper
-                    onClick={() => {
-                        setEditing({
-                            ...task,
-                            id: 0,
-                        });
-                        handleClose();
-                    }}
-                    disableRipple
-                >
+                <MenuItemWrapper onClick={handleDuplicate} disableRipple>
                     <CopyAll />
                     Duplicate
                 </MenuItemWrapper>
-                <MenuItemWrapper
-                    onClick={() => {
-                        deleteTask(task.id);
-                        handleClose();
-                    }}
-                    disableRipple
-                >
+                <MenuItemWrapper onClick={handleDelete} disableRipple>
                     <Delete />
                     Delete
                 </MenuItemWrapper>

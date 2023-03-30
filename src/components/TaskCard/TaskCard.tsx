@@ -1,4 +1,4 @@
-import { Checkbox, Stack, styled } from "@mui/material";
+import { Checkbox, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -12,8 +12,6 @@ interface IProps {
     task: ITask;
 }
 
-const label = { inputProps: { "aria-label": "Completion Status" } };
-
 const TaskCard: React.FC<IProps> = ({ task }) => {
     const toggleComplete = useStore((state) => state.toggleTask);
     const handleToggle = () => {
@@ -21,7 +19,7 @@ const TaskCard: React.FC<IProps> = ({ task }) => {
     };
 
     return (
-        <CardWrapper>
+        <Card sx={{ maxWidth: "700px", width: "100%" }}>
             {task.imgUrl && (
                 <CardMedia
                     component="img"
@@ -38,7 +36,6 @@ const TaskCard: React.FC<IProps> = ({ task }) => {
                     spacing={1}
                 >
                     <Checkbox
-                        {...label}
                         sx={{ flexShrink: 0 }}
                         checked={task.completed}
                         onChange={handleToggle}
@@ -70,13 +67,8 @@ const TaskCard: React.FC<IProps> = ({ task }) => {
                 </Stack>
             </CardContent>
             <CardActions></CardActions>
-        </CardWrapper>
+        </Card>
     );
 };
-
-const CardWrapper = styled(Card)`
-    max-width: 700px;
-    width: 100%;
-`;
 
 export default TaskCard;
